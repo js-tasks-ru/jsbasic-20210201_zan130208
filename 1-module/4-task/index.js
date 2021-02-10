@@ -4,7 +4,7 @@
  * @returns {boolean}
  */
 function checkSpam(str) {
-  alert("str".toLowerCase());
+
   if(str.includes("1XbeT now") || str.includes("free xxxxx")) {
     return true;
   }
