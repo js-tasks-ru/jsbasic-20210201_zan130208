@@ -8,10 +8,17 @@ function print(text) {
 /**
  * Эту функцию нужно поменять так,
  * чтобы функция sayHello работала корректно
- * @param {string | null} name
+ * @param {string || null} name
  * @returns {boolean}
  */
 function isValid(name) {
+  if (name===null || name.includes(" ") || name.length<4) {
+    return false;
+  }
+  else {
+    return true;
+  }
+
   // ваш код...
 }
 
