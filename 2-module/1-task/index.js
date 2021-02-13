@@ -4,5 +4,14 @@
  * @returns {Number}
  */
 function sumSalary(salaries) {
-  // ваш код...
-}
+  let totalSalary = 0;
+
+  for (let amount in salaries) {
+    let gross = typeof salaries[amount] === "number" && Number.isFinite(salaries[amount]);
+
+    if (gross) {
+      totalSalary += salaries[amount];
+    }
+  }
+  return totalSalary;
+};
