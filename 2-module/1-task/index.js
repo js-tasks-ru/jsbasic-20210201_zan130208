@@ -4,14 +4,16 @@
  * @returns {Number}
  */
 function sumSalary(salaries) {
-  let totalSalary = 0;
+  let sumOfSalaries = 0;
 
-  for (let amount in salaries) {
-    let gross = typeof salaries[amount] === "number" && Number.isFinite(salaries[amount]);
+  for (let key in salaries) {
+    let isSalary = typeof salaries[key] === 'number' && Number.isFinite(salaries[key]);
 
-    if (gross) {
-      totalSalary += salaries[amount];
+    if (isSalary) {
+      sumOfSalaries += salaries[key];
     }
   }
-  return totalSalary;
-};
+
+  return sumOfSalaries;
+}
+
