@@ -16,3 +16,4 @@ function sumSalary(salaries) {
 
   return sumOfSalaries;
 }
+
