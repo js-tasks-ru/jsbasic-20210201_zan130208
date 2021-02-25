@@ -38,4 +38,6 @@ function highlight(table) {
       }
     });
   }
+
 }
+
