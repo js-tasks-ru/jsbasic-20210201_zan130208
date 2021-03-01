@@ -15,15 +15,12 @@
 export default class UserTable {
   constructor(rows) {
     this.rows = rows;
-  }
-
-  elem (rows) {
     let table = document.createElement ('table');
     let thead = document.createElement ('thead');
     thead.innerHTML = `<tr><th>Имя</th><th>Возраст</th><th>Зарплата</th><th>Город</th><th></th></tr>`;
     table.appendChild(thead);
 
-    for (let row of this.rows) {
+    for (let row of rows) {
       let tbody = document.createElement ('tbody');
       let tr = document.createElement ('tr');
 
@@ -49,21 +46,12 @@ export default class UserTable {
 
       table.appendChild(tbody);
       tbody.appendChild(tr);
-    }
+  }
 
     table.addEventListener( "click", (event) => event.target.closest('tr').remove());
-    return table;
+    this.elem = table;
   }
 }
-
-
-// button.addEventListener ('click', this.btnClick);
-// button.addEventListener ('click', event => {
-//   if (event.target.tagName !== 'button') {
-//     return;
-//   }
-//   event.target.style = '';
-// });
 
 
 // ////////////
