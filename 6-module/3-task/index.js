@@ -4,6 +4,8 @@ export default class Carousel {
   constructor(slides) {
     this.slides = slides;
     this.elem = this.render(slides);
+    this.slidesMove(slides);
+    this.addProduct(slides);
   }
 
   render (slides) {
@@ -18,10 +20,6 @@ export default class Carousel {
       <div class="carousel__inner">${this.caruselSlides(slides)}
       </div>
     </div>`);
-
-    this.slidesMove(slides);
-    // let btnslide = document.querySelector ('.carousel__arrow');
-    // btnslide.addEventListener ('click', this.slidesMove.bind(this));
 
     return carusel;
   }
@@ -39,41 +37,55 @@ export default class Carousel {
       </button></div></div>`;
     }).join('')
 
-    this.addProduct (slidesAll);
-
     return slidesAll;
   }
 
   slidesMove (slides) {
-    let startMove = 0;
-    let slide = document.querySelector ('.carousel__slide');
-    // debugger;
-    let slideWidth = slide.offsetWidth;
-    let btnLeft = document.querySelector ('.carousel__arrow_left');
-    let btnRight = document.querySelector ('.carousel__arrow_right');
-    let slideAll = document.querySelector ('.carousel__inner');
+    let btnLeft = this.elem.querySelector ('.carousel__arrow_left');
+    let btnRight = this.elem.querySelector ('.carousel__arrow_right');
+    let innerSlide = this.elem.querySelector ('div.carousel__inner');
+    let startPosition = 0;
+    let slideWidth = this.elem.querySelector ('.carousel__slide').offsetWidth;
+    let slideAll = this.elem.querySelectorAll ('div.carousel__slide');
+
+    btnLeft.style.display = 'none';
 
     btnLeft.addEventListener ('click', () => {
-      startMove += slideWidth;
-      slideAll.style.transform = `translateX(-${slideWidth}px)`;
+      startPosition += slideWidth;
+      innerSlide.style.transform = `translateX(${startPosition}px)`;
 
       btnRight.style.display = '';
-      if (startMove == 0) {
-        btnLeft.style.display = 'none';
+      if (startPosition == 0) {
+      btnLeft.style.display = 'none';
       }
     });
 
     btnRight.addEventListener ('click', () => {
-      startMove -= slideWidth;
-      slideAll.style.transform = `translateX(${slideWidth}px)`;
+      startPosition -= slideWidth;
+      innerSlide.style.transform = `translateX(${startPosition}px)`;
 
       btnLeft.style.display = '';
-      if (startMove == -slideWidth * ( slideAll.length-1 )) {
-        btnRight.style.display = 'none';
+      if (startPosition == -slideWidth * ( slideAll.length-1 )) {
+      btnRight.style.display = 'none';
       }
     });
+  }
 
-    // for ( let i=0; i < slideAll.length; i++) {
+  addProduct (slides) {
+    let allButton = this.elem.querySelectorAll ('.carousel__button');
+
+    for (let oneButton of allButton) {
+      oneButton.addEventListener ('click', event => {
+        event.target.closest ('.carousel').dispatchEvent (new CustomEvent('product-add', {
+          detail: oneButton.closest ('.carousel__slide').dataset.id,
+          bubbles: true
+        }))
+      })
+    }
+  }
+}
+
+ // for ( let i=0; i < slideAll.length; i++) {
     //   if (i=0) {
     //     btnLeft.style.display = 'none';
     //   }
@@ -90,16 +102,3 @@ export default class Carousel {
     //     btnRight.style.display = 'none';
     //   }
     // });
-  }
-
-  addProduct (slides) {
-    let btnAdd = document.querySelector ('.carousel__button');
-    btnAdd.addEventListener ('click', event => {
-      event.target.closest ('.carousel').dispatchEvent (new CustomEvent("product-add", {
-        detail: btnAdd.closest('.carousel__slide').dataset.id,
-        bubbles: true
-      }))
-    })
-  }
-}
-
