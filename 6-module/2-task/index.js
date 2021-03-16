@@ -4,10 +4,6 @@ export default class ProductCard {
   constructor(product) {
     // this.product = product;
     this.elem = this.render(product);
-    // this.product.id = product.id;
-    // this.divCard = this.render(product);
-    // this.customClick (divCard, this.product.id);
-    // this.elem = this.divCard;
   }
 
   render (product) {

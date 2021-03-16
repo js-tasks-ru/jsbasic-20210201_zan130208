@@ -45,12 +45,13 @@ export default class Carousel {
     let btnRight = this.elem.querySelector ('.carousel__arrow_right');
     let innerSlide = this.elem.querySelector ('div.carousel__inner');
     let startPosition = 0;
-    let slideWidth = this.elem.querySelector ('.carousel__slide').offsetWidth;
+
     let slideAll = this.elem.querySelectorAll ('div.carousel__slide');
 
     btnLeft.style.display = 'none';
 
     btnLeft.addEventListener ('click', () => {
+      let slideWidth = this.elem.querySelector ('.carousel__slide').offsetWidth;
       startPosition += slideWidth;
       innerSlide.style.transform = `translateX(${startPosition}px)`;
 
@@ -61,6 +62,7 @@ export default class Carousel {
     });
 
     btnRight.addEventListener ('click', () => {
+      let slideWidth = this.elem.querySelector ('.carousel__slide').offsetWidth;
       startPosition -= slideWidth;
       innerSlide.style.transform = `translateX(${startPosition}px)`;
 
