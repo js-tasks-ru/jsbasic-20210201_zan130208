@@ -3,14 +3,10 @@ import createElement from '../../assets/lib/create-element.js';
 export default class Modal {
   constructor() {
     this.elem = this.render();
-    this.btnX = this.elem.querySelector('.modal__close');
-    document.addEventListener('keydown', function (event) {
-      if (event.code === 'Escape') {
-        this.close();
-      }
-    });
-
-    this.closeBtnX();
+    this.closeButton = this.elem.querySelector('.modal__close');
+    this.container = document.querySelector('.container');
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.close = this.close.bind(this);
   }
 
   render () {
@@ -32,47 +28,31 @@ export default class Modal {
   }
 
   open () {
-    const container = document.querySelector('.container');
-    container.append(this.elem); // ругается
+    this.container.append(this.elem);
     document.body.classList.add('is-modal-open');
+
+    document.addEventListener('keydown', this.handleKeyDown);
+    this.closeButton.addEventListener('click', this.close);
   }
 
-  // keydownListener(event) {
-  //   if (event.code === 'Escape') {
-  //     console.log(this);
-  //     // event.preventDefault();
-  //     this.close.apply();
-  //   }
-  // }
-
-  setTitle (title) { // title здесь строка, произвольное имя содержимого тега
-    const titleDiv = this.elem.querySelector('.modal__title');
-    titleDiv.innerHTML = title; // передаем аргумент, а не текст, потому без кавычек
+  handleKeyDown(event) {
+    if (event.code === 'Escape') {
+      this.close();
+    }
   }
 
-  setBody (elem) {
+  setTitle(title) {
+    const modalTitle = this.elem.querySelector('.modal__title');
+    modalTitle.innerHTML = title;
+  }
+
+  setBody(elem) {
     const modalBody = this.elem.querySelector('.modal__body');
-    modalBody.replaceWith(elem); // вставка с заменой предыдущего содержимого
+    modalBody.replaceWith(elem);
   }
 
-  close () {
-    const container = document.querySelector('.container');
+  close() {
     document.body.classList.remove('is-modal-open');
-    container.remove(this.elem);
+    this.container.remove(this.elem);
   }
-
-  closeBtnX () {
-    // let btnX = this.elem.querySelector('.modal__close');
-    this.btnX.addEventListener('click', this.close);
-  }
-
-  // closeBtnEsc () {
-  //   document.addEventListener('keydown', function (event) {
-  //     if (event.code == 'Escape') {
-  //       this.close();
-  //     }
-  //   })
-  // }
 }
-
-// как объединить три метода закрытия в один код
