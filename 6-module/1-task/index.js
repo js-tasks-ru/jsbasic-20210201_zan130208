@@ -46,7 +46,7 @@ export default class UserTable {
 
       table.appendChild(tbody);
       tbody.appendChild(tr);
-  }
+    }
 
     table.addEventListener( "click", (event) => event.target.closest('tr').remove());
     this.elem = table;
