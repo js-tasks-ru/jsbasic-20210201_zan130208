@@ -132,7 +132,7 @@ describe('7-module-3-task', () => {
     it('после создания должно быть нарисовано количество шагов, переданное в момент создания', () => {
       let steps = stepSlider.elem.querySelectorAll('.slider__steps span');
 
-      expect(steps.length).toBe(5);
+      expect(steps.length).toBe(3);
     });
 
     it('первый шаг должен быть активным', () => {
@@ -174,7 +174,7 @@ describe('7-module-3-task', () => {
 
     it('должен генерировать событие изменения значения', (done) => {
       stepSlider.elem.addEventListener('slider-change', (event) => {
-        expect(event.detail).toBe(0);
+        expect(event.detail).toBe(1);
 
         done();
       });

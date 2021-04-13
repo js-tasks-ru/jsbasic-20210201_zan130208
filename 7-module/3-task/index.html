@@ -18,13 +18,12 @@
     import StepSlider from './index.js';
 
     let stepSlider = new StepSlider({
-      steps: 5,
-      value: 0
+      steps: 5
     });
 
     holder.append(stepSlider.elem);
 
-    holder.addEventListener('slider-change', (event) => console.log(event));
+    holder.addEventListener('slider-change', (event) => console.log(event.detail));
   </script>
 </body>
 

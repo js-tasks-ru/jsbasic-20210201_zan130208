@@ -2,10 +2,11 @@ import createElement from "../../assets/lib/create-element.js";
 
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
-    this.elem = this.render();
-    this.onClick();
     this.value = value;
     this.steps = steps;
+    this.segments = steps - 1;
+    this.elem = this.render();
+    this.onClick();
   }
 
   render () {
@@ -32,15 +33,15 @@ export default class StepSlider {
   }
 
   makeMore = (event) => {
-    let left = event.clientX - this.elem.getBoundingClientRect().left; // event - событие
+    let left = event.clientX - this.elem.getBoundingClientRect().left;
     let leftRelative = left / this.elem.offsetWidth;
-    let segments = this.steps - 1;
-    let approximateValue = leftRelative * segments;
-    let value = Math.round(approximateValue);
-    let valuePercents = value / segments * 100;
+    // let segments = this.steps - 1;
+    let approximateValue = leftRelative * this.segments; // добавила this
+    let value = Math.round(approximateValue); //
+    let valuePercents = value / this.segments * 100; // добавила this
 
     const sliderValue = this.elem.querySelector('.slider__value');
-    sliderValue.innerHTML = value;
+    sliderValue.innerHTML = value; //
 
     const sliderStep = this.elem.querySelector('.slider__steps');
     const activeSteps = sliderStep.querySelectorAll('span');
@@ -58,11 +59,11 @@ export default class StepSlider {
     let thumb = this.elem.querySelector('.slider__thumb');
     let progress = this.elem.querySelector('.slider__progress');
 
-    thumb.style.left = `${valuePercents}%`;
-    progress.style.width = `${valuePercents}%`;
+    thumb.style.left = `${valuePercents}%`;  //
+    progress.style.width = `${valuePercents}%`;  //
 
     this.elem.dispatchEvent(new CustomEvent('slider-change', {
-      detail: this.value,
+      detail: value,
       bubbles: true
     }))
   }
