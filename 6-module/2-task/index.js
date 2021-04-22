@@ -19,12 +19,12 @@ export default class ProductCard {
     <img src="/assets/images/icons/plus-icon.svg" alt="icon">
     </button></div>`;
 
-    this.customClick (divCard, product.id);
+    this.customClick(divCard, product.id);
 
     return divCard;
   }
 
-  customClick (elem, id) {
+  customClick(elem, id) {
     elem.querySelector (".card__button");
     elem.addEventListener ('click', event => {
       event.target.closest (".card").dispatchEvent (new CustomEvent("product-add", {

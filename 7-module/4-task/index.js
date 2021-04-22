@@ -3,9 +3,11 @@ import createElement from '../../assets/lib/create-element.js';
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
     this.elem = this.render();
+    this.valueGet(value);
     this.onClick();
-    this.value = value;
+    // this.value = value;
     this.steps = steps;
+    this.segments = steps - 1;
   }
 
   render () {
@@ -27,43 +29,26 @@ export default class StepSlider {
     return slider;
   }
 
-  onClick () {
-    const thumb = this.elem.querySelector('.slider__thumb');
-    thumb.ondragstart = () => false;
+  valueGet (value) {
 
-    thumb.onpointerdown = (event) => {
-      event.preventDefault();
+    this.value = value;
+    // this.steps = steps;
+    // this.segments = steps - 1;
 
-      this.elem.classList.add('slider_dragging');
+    // let left = event.clientX - this.elem.getBoundingClientRect().left; // расстояние от начала элемента слайдера до курсор в момент клика
+    // let leftRelative = left / this.elem.offsetWidth; // значение в процентах относительно всего слайдера
+    // let segments = this.steps - 1;
+    // let approximateValue = leftRelative * segments; // получить конкретное значение слайдера:
+    // берем относительное значение и * на колво сегментов
+    // let value = Math.round(approximateValue); // округлили до целого
 
-      document.addEventListener('pointermove', this.pointerMove);
-      document.addEventListener('pointerup', this.pointerUp);
-
-      this.elem.dispatchEvent(new CustomEvent('slider-change'), { // не отрабатывает
-        detail: this.value,
-        bubbles: true
-      })
-    }
-
-    this.elem.addEventListener('click', this.makeMore); // другой способ перемещения
-  }
-
-  makeMore = (event) => {
-    let otherleft = event.clientX - this.elem.getBoundingClientRect().left;
-    let leftRelative = otherleft / this.elem.offsetWidth;
-    let segments = this.steps - 1;
-    let approximateValue = leftRelative * segments;
-    let value = Math.round(approximateValue);
-    let valuePercents = value / segments * 100;
-
-    const sliderValue = this.elem.querySelector('.slider__value');
-    sliderValue.innerHTML = value;
+    let sliderValue = this.elem.querySelector('.slider__value');
+    sliderValue.innerHTML = value; // добавили значение  // +
 
     const sliderStep = this.elem.querySelector('.slider__steps');
     const activeSteps = sliderStep.querySelectorAll('span');
-
-    // преобразование в массив
-    [...activeSteps].forEach((element, index) => {
+    // преобразование в массив, визуально выделили шаг на слайдере
+    [...activeSteps].forEach((element, index) => {  // +
       if(index === value) {
         element.classList.add('slider__step-active')
       }
@@ -74,12 +59,69 @@ export default class StepSlider {
 
     let thumb = this.elem.querySelector('.slider__thumb');
     let progress = this.elem.querySelector('.slider__progress');
+    let valuePercents = value / this.segments * 100; // + // добавила this
 
-    thumb.style.left = `${valuePercents}%`;
-    progress.style.width = `${valuePercents}%`;
+    thumb.style.left = `${valuePercents}%`;  // +
+    progress.style.width = `${valuePercents}%`;  // +
+  }
+
+  onClick () {
+    const thumb = this.elem.querySelector('.slider__thumb');
+    thumb.ondragstart = () => false;  // +
+
+    thumb.onpointerdown = (event) => {
+      event.preventDefault();
+
+      this.elem.classList.add('slider_dragging');  // +
+
+      document.addEventListener('pointermove', this.pointerMove);  // +
+      document.addEventListener('pointerup', this.pointerUp);  // +
+
+      // const value = this.valueGet(value);
+
+      this.elem.dispatchEvent(new CustomEvent('slider-change'), { // не отрабатывает
+        detail: this.value,  // +
+        bubbles: true
+      })
+    }
+
+    this.elem.addEventListener('click', this.makeMore); // другой способ перемещения
+  }
+
+  makeMore = (event) => {
+    // const value = this.valueGet(value);
+    let otherLeft = event.clientX - this.elem.getBoundingClientRect().left;  // +
+    let leftRelative = otherLeft / this.elem.offsetWidth;  // +
+    // let segments = this.steps - 1;
+    let approximateValue = leftRelative * this.segments; // + // добавила this
+    this.valueGet(Math.round(approximateValue));  // ????
+    // let value = Math.round(approximateValue); // -
+    // let valuePercents = value / segments * 100; // ?
+
+    // const sliderValue = this.elem.querySelector('.slider__value');
+    // sliderValue.innerHTML = value;
+
+    // const sliderStep = this.elem.querySelector('.slider__steps');
+    // const activeSteps = sliderStep.querySelectorAll('span');
+
+    // // преобразование в массив
+    // [...activeSteps].forEach((element, index) => {
+    //   if(index === value) {
+    //     element.classList.add('slider__step-active')
+    //   }
+    //   else {
+    //     element.classList.remove('slider__step-active')
+    //   }
+    // });
+
+    // let thumb = this.elem.querySelector('.slider__thumb');
+    // let progress = this.elem.querySelector('.slider__progress');
+
+    // thumb.style.left = `${valuePercents}%`;
+    // progress.style.width = `${valuePercents}%`;
 
     this.elem.dispatchEvent(new CustomEvent('slider-change', {
-        detail: value,
+        detail: this.value,
         bubbles: true
       })
     );
@@ -90,30 +132,30 @@ export default class StepSlider {
 
     let left = event.clientX - this.elem.getBoundingClientRect().left; // расстояние от начала элемента слайдера до курсор в момент клика
     let leftRelative = left / this.elem.offsetWidth; // значение в процентах относительно всего слайдера
-    if (leftRelative < 0) {leftRelative = 0;}
-    if (leftRelative > 1) {leftRelative = 1;}
+    if (leftRelative < 0) {leftRelative = 0;} // +
+    if (leftRelative > 1) {leftRelative = 1;}  // +
 
-    const leftPercents = leftRelative * 100;
+    const leftPercents = leftRelative * 100;  // +
 
     const thumb = this.elem.querySelector('.slider__thumb');
     const progress = this.elem.querySelector('.slider__progress');
 
     thumb.style.left = `${leftPercents}%`;  // перемещаем ползунок и «закрашиваем» область до него
-    progress.style.width = `${leftPercents}%`;
+    progress.style.width = `${leftPercents}%`;  // +
 
-    const segments = this.steps - 1;
-    const approximateValue = leftRelative * segments; // получить конкретное значение слайдера:
+    // const segments = this.steps - 1;
+    const approximateValue = leftRelative * this.segments; // добавила this // получить конкретное значение слайдера:
     // берем относительное значение и * на колво сегментов
-    const value = Math.round(approximateValue); // округлили до целого
+    this.value = Math.round(approximateValue); // округлили до целого  // +
 
     const sliderValue = this.elem.querySelector('.slider__value');
-    sliderValue.innerHTML = value; // добавили значение
+    sliderValue.innerHTML = this.value; // добавили значение  // + // добавила this
 
     const sliderStep = this.elem.querySelector('.slider__steps');
     const activeSteps = sliderStep.querySelectorAll('span');
     // преобразование в массив, визуально выделили шаг на слайдере
     [...activeSteps].forEach((element, index) => {
-      if(index === value) {
+      if(index === this.value) {
         element.classList.add('slider__step-active')
       }
       else {
